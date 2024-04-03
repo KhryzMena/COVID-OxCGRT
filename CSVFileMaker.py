@@ -1,5 +1,6 @@
 import csv
 import os
+import copy
 import columnPlot as cp
 import load_data as ld
 
@@ -19,6 +20,11 @@ def countryCSVFileMaker(csvfilename):
     :Example:
         countryCSVFileMaker("OxCGRT_compact_national_v1.csv")
     '''
+    csvfilename_dir = csvfilename.split(".")[0]
+    try:
+        os.mkdir(csvfilename_dir)
+    except Exception:
+        pass
     with open(csvfilename, encoding="utf8") as csvfile:
         data = csv.reader(csvfile, delimiter=',')
         dataset = []
@@ -40,7 +46,7 @@ def countryCSVFileMaker(csvfilename):
             # Attempts to make new directory with the country as the directory
             # name. If it already exists: pass
             try:
-                os.mkdir(country.replace(" ",""))
+                os.mkdir(csvfilename_dir + '/' + country.replace(" ",""))
             except Exception:
                 pass
             for row in dataset:
@@ -48,11 +54,11 @@ def countryCSVFileMaker(csvfilename):
                 if row[0] == country:
                     csv_list.append(row)
             # Create csv file with all country data
-            with open(country.replace(" ","") + '/' + countrycsvfilename, "w", newline='') as csvfile:
+            with open(csvfilename_dir + '/' + country.replace(" ","") + '/' + countrycsvfilename, "w", newline='') as csvfile:
                 csvwriter = csv.writer(csvfile)
                 csvwriter.writerows(csv_list)
 
-            countrycsvfilename = country.replace(" ","") + "/" + country.replace(" ","") + csvfilename
+            countrycsvfilename = csvfilename_dir + '/' + country.replace(" ","") + "/" + country.replace(" ","") + csvfilename
             us_list = ld.load_data(countrycsvfilename)
             # Create a list of regions in country in current cycle
             regions_list=[]
@@ -70,7 +76,7 @@ def countryCSVFileMaker(csvfilename):
             for region in regions_list:
                 region_dataset = []
                 region_dataset.append(dataset[0])
-                country_region_csvfilename = country.replace(" ","") + "/" + country.replace(" ","") + region.replace(" ","") + csvfilename
+                country_region_csvfilename = csvfilename_dir + '/' + country.replace(" ","") + "/" + country.replace(" ","") + region.replace(" ","") + csvfilename
                 for row in country_dataset:
                     if row[2] == "RegionName":
                         pass
