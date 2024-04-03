@@ -55,6 +55,7 @@ def columnPlot(csvfilename, country, columnName, image_filename, region=''):
     plt.ylabel(columnName)
     plt.title(country + " " + region + " " + columnName + ' Over Time')
     plt.xticks(rotation=30)
+    plt.tight_layout()
     plt.savefig(image_filename)
     #plt.show()
     plt.close()

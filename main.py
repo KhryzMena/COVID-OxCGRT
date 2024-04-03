@@ -5,7 +5,7 @@ from countries import countries_dict, countries
 
 # Runs the CSVFIleMaker program that creates separate CSV files for each country and their regions 
 # separately
-csvfilename = "OxCGRT_compact_national_v1.csv"
+csvfilename = "OxCGRT_compact_subnational_v1.csv"
 csvfilename_dir = csvfilename.split(".")[0]
 
 #cfm.countryCSVFileMaker(csvfilename)
@@ -17,8 +17,9 @@ csvfilename_dir = csvfilename.split(".")[0]
 columnNames = ["ConfirmedCases", "ConfirmedDeaths"]
 
 for columnName in columnNames:
-    for country in countries:
-        country_region_csvfilename = csvfilename_dir + '/' + country.replace(" ","") + "/" + country.replace(" ","") + csvfilename
-        country_region_pngfilename = csvfilename_dir + '/' + country.replace(" ","") + "/" + country.replace(" ","") + columnName  + csvfilename.split(".")[0] + ".png"
-        cp.columnPlot(country_region_csvfilename, country, columnName, country_region_pngfilename, region='')
+    for country in countries_dict.keys():
+        for region in countries_dict[country]:
+            country_region_csvfilename = csvfilename_dir + '/' + country.replace(" ","") + "/" + country.replace(" ","") + region.replace(" ","") + csvfilename
+            country_region_pngfilename = csvfilename_dir + '/' + country.replace(" ","") + "/" + country.replace(" ","") + region.replace(" ","") + columnName + csvfilename.split(".")[0] + ".png"
+            cp.columnPlot(country_region_csvfilename, country, columnName, country_region_pngfilename, region)
 
